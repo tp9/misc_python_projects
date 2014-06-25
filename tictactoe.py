@@ -13,7 +13,7 @@ def clrArray():
         a.append(0)
     return a
 
-def print_board():
+def print_board(board):
     def mark(i):
         if board[i] == 0:
             return str(i + 1)
@@ -25,7 +25,7 @@ def print_board():
 # possible values of best
 best_draw = -3; best_done = -2; best_common = -1
 
-def scan_board():
+def scan_board(board):
     global hcnt, ccnt, best, common1, common0
     common1 = clrArray(); common0 = clrArray()
     best = best_draw
@@ -55,9 +55,9 @@ def find_max(a):
         if a [i] > m: m = a[i]; j = i
     return j
 
-def choose_move(human_turn):
+def choose_move(human_turn, board):
     global best,common1,common0
-    scan_board()
+    scan_board(board)
     if hcnt == 3:
         print("You win!")
     elif ccnt == 3:
@@ -78,17 +78,17 @@ def choose_move(human_turn):
         return best >= 0
     return False
 
-def play_game():
+def play_game(board):
     global msg, first_move
     mv = input(msg + " ")
     if mv == "q" or mv == "Q":
         print("Game Aborted")
         return False
     if mv == "" and first_move:
-        if choose_move(False):
+        if choose_move(False, board):
             board[best] = computer
             print("------------")
-            print_board()
+            print_board(board)
             return True        
     try:
         mi = int(mv) - 1
@@ -103,24 +103,27 @@ def play_game():
         return True
     board[mi] = human
     msg = "Your square?"
-    print_board()
-    if choose_move(False):
+    print_board(board)
+    if choose_move(False, board):
         board[best] = computer
         print("------------")
-        print_board()
-        return choose_move(True)
+        print_board(board)
+        return choose_move(True, board)
     return False
 
-
-board = clrArray()
-msg = "Your square?"
-first_move = True
-again = True
-print("Hit enter to let computer move first")
-print("Enter Q to quit game")
-print("Enter 1 through 9 to play a square")
-print("Computer is " + computer + "  you are " + human)
-print_board()
-while again:
-    again = play_game()
-    first_move = False
+def main():
+    global msg
+    board = clrArray()
+    msg = "Your square?"
+    first_move = True
+    again = True
+    print("Hit enter to let computer move first")
+    print("Enter Q to quit game")
+    print("Enter 1 through 9 to play a square")
+    print("Computer is " + computer + "  you are " + human)
+    print_board(board)
+    while again:
+        again = play_game(board)
+        first_move = False
+        
+if __name__ == '__main__': main()
